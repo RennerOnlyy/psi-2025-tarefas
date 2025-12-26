@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.titulo }} - Blog Django{% endblock %}
+
+{% block extra_css %}
+<style>
+    .post-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 40px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .post-title {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+    
+    .post-meta {
+        color: #7f8c8d;
+        font-size: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .post-image-container {
+        margin: 30px 0;
+        text-align: center;
+    }
+    
+    .post-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .post-content {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        line-height: 1.8;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .post-content p {
+        margin-bottom: 20px;
+    }
+    
+    .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .nav-button {
+        padding: 10px 25px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .back-button {
+        background: #7f8c8d;
+    }
+    
+    .back-button:hover {
+        background: #636e72;
+    }
+    
+    .admin-edit {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .edit-link {
+        display: inline-block;
+        padding: 8px 20px;
+        background: #2c3e50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+    
+    .edit-link:hover {
+        background: #1a252f;
+    }
+    
+    .info-box {
+        background: #f8f9fa;
+        border-left: 4px solid #3498db;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+    
+    @media (max-width: 768px) {
+        .post-title {
+            font-size: 2rem;
+        }
+        
+        .post-content {
+            padding: 20px;
+        }
+        
+        .navigation {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .nav-button {
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Post Header -->
+<div class="post-header">
+    <h1 class="post-title">{{ post.titulo }}</h1>
+    
+    <div class="post-meta">
+        <span>📅 Publicado em: {{ post.data_publicacao|date:"d/m/Y" }}</span>
+        <span>⏰ {{ post.data_publicacao|date:"H:i" }}</span>
+        <span>✍️ Criado em: {{ post.data_criacao|date:"d/m/Y" }}</span>
+    </div>
+</div>
+
+<!-- Post Image -->
+{% if post.imagem %}
+<div class="post-image-container">
+    <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" class="post-image">
+</div>
+{% endif %}
+
+<!-- Post Content -->
+<div class="post-content">
+    {{ post.conteudo|linebreaks }}
+</div>
+
+<!-- Admin Edit Link -->
+<div class="admin-edit">
+    <a href="/admin/blog/post/{{ post.id }}/change/" class="edit-link">
+        ✏️ Editar este post (Admin)
+    </a>
+</div>
+
+<!-- Navigation -->
+<div class="navigation">
+    <a href="{% url 'index' %}" class="nav-button back-button">← Voltar para todos os posts</a>
+    <a href="/admin/blog/post/add/" class="nav-button">➕ Criar novo post</a>
+</div>
+
+<!-- Info Box -->
+<div class="info-box">
+    <p><strong>ℹ️ Informações do Post:</strong></p>
+    <p>ID: {{ post.id }} | Status: {% if post.publicado %}✅ Publicado{% else %}⚠️ Rascunho{% endif %}</p>
+</div>
+{% endblock %}
